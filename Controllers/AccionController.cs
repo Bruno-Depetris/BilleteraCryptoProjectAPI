@@ -13,6 +13,7 @@ namespace BilleteraCryptoProjectAPI.Controllers {
         public AccionController(IAccionService accionService, IMapper mapper) {
             _accionService = accionService;
             this.mapper = mapper;
+
         }
 
         [HttpGet]
