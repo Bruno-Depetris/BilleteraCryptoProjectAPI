@@ -15,6 +15,7 @@ public partial class CryptoWalletApiDBContext : DbContext {
     }
 
     public static string GetConnectionString() {
+
         var host = Environment.GetEnvironmentVariable("MYSQL_ADDON_HOST");
         var port = Environment.GetEnvironmentVariable("MYSQL_ADDON_PORT");
         var db = Environment.GetEnvironmentVariable("MYSQL_ADDON_DB");
