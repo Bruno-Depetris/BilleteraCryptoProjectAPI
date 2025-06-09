@@ -1,17 +1,43 @@
+using BilleteraCryptoProjectAPI.Data;
+using Microsoft.EntityFrameworkCore;
+using DotNetEnv;
+using System;
+using BilleteraCryptoProjectAPI.Logic;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Cargar el archivo .env
+DotNetEnv.Env.Load();
 
+// Configurar servicios
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Registrar el DbContext antes de llamar a Build()
+builder.Configuration["ConnectionStrings:DefaultConnection"] = CryptoWalletApiDBContext.GetConnectionString();
+builder.Services.AddDbContext<CryptoWalletApiDBContext>(options =>
+    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(8, 0, 23))));
+
+builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddScoped<IAccionService, AccionLogic>();
+builder.Services.AddScoped<IClienteService, ClienteLogic>();
+builder.Services.AddScoped<ICriptoService, CriptoLogic>();
+builder.Services.AddScoped<ICuentaService, CuentaLogic>();
+builder.Services.AddScoped<IEstadoService, EstadoLogic>();
+builder.Services.AddScoped<IHistorialPrecioService, HistorialPrecioLogic>();
+builder.Services.AddScoped<IMovimientoService, MovimientoLogic>();
+
+
+
+// Construir la app
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+// Configurar el pipeline HTTP
+if (app.Environment.IsDevelopment()) {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -21,5 +47,17 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseExceptionHandler(errorApp => {
+    errorApp.Run(async context => {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "text/plain";
+
+        var error = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+        if (error != null) {
+            await context.Response.WriteAsync(error.Error.Message);
+        }
+    });
+});
 
 app.Run();
