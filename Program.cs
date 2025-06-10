@@ -7,7 +7,7 @@ using BilleteraCryptoProjectAPI.Logic;
 var builder = WebApplication.CreateBuilder(args);
 
 // Cargar el archivo .env
-DotNetEnv.Env.Load();
+Env.Load();
 
 // Configurar servicios
 builder.Services.AddControllers();
