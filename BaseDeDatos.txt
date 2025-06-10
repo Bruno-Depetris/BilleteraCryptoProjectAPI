@@ -1,0 +1,69 @@
+﻿-- 1. Estados de cuenta
+CREATE TABLE Estados (
+    EstadoID INT AUTO_INCREMENT PRIMARY KEY,
+    Estado VARCHAR(50) NOT NULL
+) ENGINE=InnoDB;
+
+-- 2. Clientes
+CREATE TABLE Clientes (
+    ClienteID INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE
+) ENGINE=InnoDB;
+
+-- 3. Cuentas asociadas a clientes
+CREATE TABLE Cuentas (
+    CuentaID INT AUTO_INCREMENT PRIMARY KEY,
+    ClienteID INT NOT NULL,
+    EstadoID INT NOT NULL,
+    FOREIGN KEY (ClienteID) REFERENCES Clientes(ClienteID),
+    FOREIGN KEY (EstadoID) REFERENCES Estados(EstadoID)
+) ENGINE=InnoDB;
+
+-- 4. Criptomonedas
+CREATE TABLE Criptos (
+    CriptoCode VARCHAR(20) PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL
+) ENGINE=InnoDB;
+
+-- 5. Historial de precios
+CREATE TABLE HistorialPrecios (
+    HistorialID INT AUTO_INCREMENT PRIMARY KEY,
+    CriptoCode VARCHAR(20) NOT NULL,
+    Precio DECIMAL(18, 2) NOT NULL,
+    Fecha DATETIME NOT NULL,
+    Fuente VARCHAR(100),
+    FOREIGN KEY (CriptoCode) REFERENCES Criptos(CriptoCode)
+) ENGINE=InnoDB;
+
+-- 6. Acciones (compra/venta)
+CREATE TABLE Acciones (
+    AccionID INT AUTO_INCREMENT PRIMARY KEY,
+    Accion VARCHAR(20) NOT NULL
+) ENGINE=InnoDB;
+
+-- 7. Operaciones (compra o venta de cripto)
+CREATE TABLE Operaciones (
+    OperacionID INT AUTO_INCREMENT PRIMARY KEY,
+    CuentaID INT NOT NULL,
+    CriptoCode VARCHAR(20) NOT NULL,
+    Cantidad DECIMAL(18, 8) NOT NULL,
+    Fecha DATETIME NOT NULL,
+    AccionID INT NOT NULL,
+    MontoARS DECIMAL(18, 2) NOT NULL,
+    FOREIGN KEY (CuentaID) REFERENCES Cuentas(CuentaID),
+    FOREIGN KEY (CriptoCode) REFERENCES Criptos(CriptoCode),
+    FOREIGN KEY (AccionID) REFERENCES Acciones(AccionID)
+) ENGINE=InnoDB;
+
+-- 8. Movimientos (estado posterior a cada operación)
+CREATE TABLE Movimientos (
+    MovimientoID INT AUTO_INCREMENT PRIMARY KEY,
+    OperacionID INT NOT NULL,
+    CriptoCode VARCHAR(20) NOT NULL,
+    CantidadCripto DECIMAL(18,8) NOT NULL,
+    EstadoBilletera DECIMAL(18,8) NOT NULL,
+    Fecha DATETIME NOT NULL,
+    FOREIGN KEY (OperacionID) REFERENCES Operaciones(OperacionID),
+    FOREIGN KEY (CriptoCode) REFERENCES Criptos(CriptoCode)
+) ENGINE=InnoDB;
