@@ -1,4 +1,5 @@
 ﻿using BilleteraCryptoProjectAPI.Data;
+using BilleteraCryptoProjectAPI.DTO.HistorialPrecios;
 using BilleteraCryptoProjectAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -54,6 +55,23 @@ namespace BilleteraCryptoProjectAPI.Logic {
 
         }
 
-        
+        public async Task<bool> UpdateAsync(HistorialPrecioUpdateDTO dto) {
+            if (dto == null) {
+                throw new ArgumentNullException(nameof(dto));
+            }
+            var historial = await _context.HistorialPrecios
+                .FirstOrDefaultAsync(h => h.HistorialId == dto.HistorialPrecioID);
+            if (historial == null) {
+                return false;
+            }
+            historial.CriptoCode = dto.CriptoCode;
+            historial.Precio = dto.Precio;
+            historial.Fecha = dto.Fecha;
+            _context.HistorialPrecios.Update(historial);
+            await _context.SaveChangesAsync();
+            return true;
+
+
+        }
     }
 }
