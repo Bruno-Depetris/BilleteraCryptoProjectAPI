@@ -30,7 +30,7 @@ namespace BilleteraCryptoProjectAPI.Controllers {
         [HttpPost]
         public async Task<ActionResult<CriptoReadDTO>> CreateAsync(CriptoCreateDTO dto) {
             var cripto = await criptoService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetByCodeAsync), new { code = cripto.Code }, mapper.Map<CriptoReadDTO>(cripto));
+            return CreatedAtAction(nameof(GetByCodeAsync), new { code = cripto.CriptoCode }, mapper.Map<CriptoReadDTO>(cripto));
         }
 
         [HttpPut("{code}")]
