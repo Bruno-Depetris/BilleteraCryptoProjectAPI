@@ -15,10 +15,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Registrar el DbContext antes de llamar a Build()
-builder.Services.AddDbContext<CryptoWalletApiDBContext>(options =>
-    options.UseMySql(CryptoWalletApiDBContext.GetConnectionString(),
-        new MySqlServerVersion(new Version(8, 0, 23))));
 
+var connectionString = CryptoWalletApiDBContext.GetConnectionString();
+
+builder.Services.AddDbContext<CryptoWalletApiDBContext>(options =>
+    options.UseMySql(
+        connectionString,
+        ServerVersion.AutoDetect(connectionString)
+    )
+);
 
 builder.Services.AddAutoMapper(typeof(Program));
 
