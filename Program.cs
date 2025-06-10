@@ -35,6 +35,17 @@ builder.Services.AddScoped<IEstadoService, EstadoLogic>();
 builder.Services.AddScoped<IHistorialPrecioService, HistorialPrecioLogic>();
 builder.Services.AddScoped<IMovimientoService, MovimientoLogic>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()  // o usa WithOrigins("http://localhost:5173") si querés restringir
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+app.UseCors();
 
 
 // Construir la app
