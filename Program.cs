@@ -32,6 +32,7 @@ builder.Services.AddScoped<IClienteService, ClienteLogic>();
 builder.Services.AddScoped<ICriptoService, CriptoLogic>();
 builder.Services.AddScoped<ICuentaService, CuentaLogic>();
 builder.Services.AddScoped<IEstadoService, EstadoLogic>();
+builder.Services.AddScoped<IOperacionService, OperacionLogic>();
 builder.Services.AddScoped<IHistorialPrecioService, HistorialPrecioLogic>();
 builder.Services.AddScoped<IMovimientoService, MovimientoLogic>();
 

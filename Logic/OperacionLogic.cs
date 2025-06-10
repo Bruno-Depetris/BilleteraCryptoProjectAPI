@@ -3,7 +3,7 @@ using BilleteraCryptoProjectAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BilleteraCryptoProjectAPI.Logic {
-    public class OperacionLogic {
+    public class OperacionLogic : IOperacionService {
         private readonly CryptoWalletApiDBContext _context;
 
         public OperacionLogic(CryptoWalletApiDBContext context) {
