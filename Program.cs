@@ -45,12 +45,12 @@ builder.Services.AddCors(options =>
     });
 });
 
-app.UseCors();
+
 
 
 // Construir la app
 var app = builder.Build();
-
+app.UseCors();
 // Configurar el pipeline HTTP
 if (app.Environment.IsDevelopment()) {
     app.UseDeveloperExceptionPage();
