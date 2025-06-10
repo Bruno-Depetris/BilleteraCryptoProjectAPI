@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BilleteraCryptoProjectAPI.DTO.HistorialPrecios;
 using BilleteraCryptoProjectAPI.Models;
 
 namespace BilleteraCryptoProjectAPI.Mapping {
@@ -35,6 +36,8 @@ namespace BilleteraCryptoProjectAPI.Mapping {
             CreateMap<HistorialPrecio, HistorialPrecioReadDTO>();
             CreateMap<HistorialPrecio, HistorialPrecioCreateDTO>();
             CreateMap<HistorialPrecioCreateDTO, HistorialPrecio>();
+            CreateMap<HistorialPrecioUpdateDTO, HistorialPrecio>();
+            CreateMap<HistorialPrecio, HistorialPrecioUpdateDTO>();
 
             CreateMap<HistorialPrecioReadDTO, HistorialPrecio>(); // Ignorar HistorialPrecioId al mapear desde MostrarHistorialDePrecioDTO a HistorialPrecio
 
