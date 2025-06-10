@@ -36,11 +36,22 @@ builder.Services.AddScoped<IOperacionService, OperacionLogic>();
 builder.Services.AddScoped<IHistorialPrecioService, HistorialPrecioLogic>();
 builder.Services.AddScoped<IMovimientoService, MovimientoLogic>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()  // o usa WithOrigins("http://localhost:5173") si querés restringir
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+
 
 
 // Construir la app
 var app = builder.Build();
-
+app.UseCors();
 // Configurar el pipeline HTTP
 if (app.Environment.IsDevelopment()) {
     app.UseDeveloperExceptionPage();
