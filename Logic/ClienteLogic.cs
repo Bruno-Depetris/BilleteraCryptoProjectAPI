@@ -14,6 +14,7 @@ namespace BilleteraCryptoProjectAPI.Logic {
         public async Task<IEnumerable<ClienteReadDTO>> GetAllAsync() {
             return await _context.Clientes
                 .Select(cliente => new ClienteReadDTO {
+                    ClienteID = cliente.ClienteId,
                     Nombre = cliente.Nombre,
                     Email = cliente.Email
                 })
@@ -24,6 +25,7 @@ namespace BilleteraCryptoProjectAPI.Logic {
             var cliente = await _context.Clientes.FindAsync(id);
             if (cliente == null) return null;
             return new ClienteReadDTO {
+                ClienteID = cliente.ClienteId,
                 Nombre = cliente.Nombre,
                 Email = cliente.Email
             };
