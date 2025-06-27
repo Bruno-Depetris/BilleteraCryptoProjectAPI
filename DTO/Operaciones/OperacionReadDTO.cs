@@ -8,7 +8,4 @@ public class OperacionReadDTO
     public int AccionID { get; set; }
     public decimal MontoARS { get; set; }
 
-    public CuentaReadDTO? Cuenta { get; set; }
-    public CriptoReadDTO? Cripto { get; set; }
-    public AccionReadDTO? Accion { get; set; }
 }

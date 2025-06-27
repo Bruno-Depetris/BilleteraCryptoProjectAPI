@@ -48,8 +48,10 @@ namespace BilleteraCryptoProjectAPI.Logic {
                 AccionId = dto.AccionID,
                 Fecha = DateTime.UtcNow
             };
+
             _context.Operaciones.Add(operacion);
             await _context.SaveChangesAsync();
+
             return new OperacionReadDTO {
                 OperacionID = operacion.OperacionId,
                 CuentaID = operacion.CuentaId,

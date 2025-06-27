@@ -16,7 +16,7 @@ namespace BilleteraCryptoProjectAPI.Controllers {
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync() {
+        public async Task<IActionResult> Get() {
             try {
                 var operaciones = await _operacionService.GetAllAsync();
                 if (operaciones == null || !operaciones.Any()) {
@@ -29,7 +29,7 @@ namespace BilleteraCryptoProjectAPI.Controllers {
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetByIdAsync(int id) {
+        public async Task<IActionResult> Get(int id) {
             try {
                 var operacion = await _operacionService.GetByIdAsync(id);
                 if (operacion == null) {
@@ -43,15 +43,18 @@ namespace BilleteraCryptoProjectAPI.Controllers {
 
         [HttpPost]
 
-        public async Task<IActionResult> CreateAsync([FromBody] OperacionCreateDTO operacionCreateDTO) {
+        public async Task<IActionResult> Post([FromBody] OperacionCreateDTO operacionCreateDTO) {
             if (operacionCreateDTO == null) {
                 return BadRequest("El objeto Operacion no puede ser nulo.");
             }
             try {
                 var operacion = await _operacionService.CreateAsync(operacionCreateDTO);
-                return CreatedAtAction(nameof(GetByIdAsync), new { id = operacion.OperacionID }, operacion);
+                return CreatedAtAction(nameof(Get), new { id = operacion.OperacionID }, operacion);
             } catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error al crear la operación: {ex.Message}");
+
+
+
             }
         }
     }

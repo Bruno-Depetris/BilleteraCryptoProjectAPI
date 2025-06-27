@@ -10,28 +10,28 @@ namespace BilleteraCryptoProjectAPI.Mapping {
             CreateMap<Cliente, ClienteReadDTO> ();
 
             CreateMap<ClienteCreateDTO, Cliente>()
-                .ForMember(dest => dest.ClienteId, opt => opt.Ignore()); // Ignorar ClienteId al crear un nuevo cliente
+                .ForMember(dest => dest.ClienteId, opt => opt.Ignore());
             CreateMap<ClienteReadDTO, Cliente>()
-                .ForMember(dest => dest.ClienteId, opt => opt.Ignore()); // Ignorar ClienteId al mapear desde ClientesDTO a Cliente
+                .ForMember(dest => dest.ClienteId, opt => opt.Ignore());
 
             CreateMap<Movimiento, MovimientoCreateDTO> ();
             CreateMap<Movimiento, MovimientoReadDTO>();
             CreateMap<MovimientoCreateDTO, Movimiento>()
-                .ForMember(dest => dest.MovimientoId, opt => opt.Ignore()); // Ignorar MovimientoId al crear un nuevo movimiento
+                .ForMember(dest => dest.MovimientoId, opt => opt.Ignore()); 
             CreateMap<MovimientoReadDTO, Movimiento>()
-                .ForMember(dest => dest.MovimientoId, opt => opt.Ignore()); // Ignorar MovimientoId al mapear desde MostrarMovimientosDTO a Movimiento
+                .ForMember(dest => dest.MovimientoId, opt => opt.Ignore());
             CreateMap<Operacione, OperacionCreateDTO>();
             CreateMap<Operacione, OperacionReadDTO>();
             CreateMap<OperacionCreateDTO, Operacione>()
-                .ForMember(dest => dest.OperacionId, opt => opt.Ignore()); // Ignorar OperacionId al crear una nueva operacion
+                .ForMember(dest => dest.OperacionId, opt => opt.Ignore()); 
             CreateMap<OperacionReadDTO, Operacione>()
-                .ForMember(dest => dest.OperacionId, opt => opt.Ignore()); // Ignorar OperacionId al mapear desde MostrarOperacionesDTO a Operacione
+                .ForMember(dest => dest.OperacionId, opt => opt.Ignore());
             CreateMap<Cripto, CriptoReadDTO>();
             CreateMap<Cripto, CriptoCreateDTO>();
             CreateMap<CriptoCreateDTO, Cripto>()
-                .ForMember(dest => dest.CriptoCode, opt => opt.Ignore()); // Ignorar CriptoCode al crear una nueva cripto
+                .ForMember(dest => dest.CriptoCode, opt => opt.Ignore()); 
             CreateMap<CriptoReadDTO, Cripto>()
-                .ForMember(dest => dest.CriptoCode, opt => opt.Ignore()); // Ignorar CriptoCode al mapear desde MostrarCryptoDTO a Cripto
+                .ForMember(dest => dest.CriptoCode, opt => opt.Ignore()); 
 
             CreateMap<HistorialPrecio, HistorialPrecioReadDTO>();
             CreateMap<HistorialPrecio, HistorialPrecioCreateDTO>();
@@ -39,7 +39,7 @@ namespace BilleteraCryptoProjectAPI.Mapping {
             CreateMap<HistorialPrecioUpdateDTO, HistorialPrecio>();
             CreateMap<HistorialPrecio, HistorialPrecioUpdateDTO>();
 
-            CreateMap<HistorialPrecioReadDTO, HistorialPrecio>(); // Ignorar HistorialPrecioId al mapear desde MostrarHistorialDePrecioDTO a HistorialPrecio
+            CreateMap<HistorialPrecioReadDTO, HistorialPrecio>(); 
 
 
 
