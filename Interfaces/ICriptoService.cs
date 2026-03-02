@@ -1,4 +1,4 @@
-public interface ICriptoService
+﻿public interface ICriptoService
 {
     Task<IEnumerable<CriptoReadDTO>> GetAllAsync();
     Task<CriptoReadDTO?> GetByCodeAsync(string code);
@@ -6,3 +6,4 @@ public interface ICriptoService
     Task<bool> UpdateAsync(CriptoUpdateDTO dto);
     Task<bool> DeleteAsync(string code);
 }
+

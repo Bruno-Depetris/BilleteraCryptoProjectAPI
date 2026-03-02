@@ -11,4 +11,8 @@ public partial class Cliente {
     public string Email { get; set; } = null!;
 
     public virtual ICollection<Cuenta> Cuenta { get; set; } = new List<Cuenta>();
+
+    public virtual ICollection<Operacione> Operaciones { get; set; } = new List<Operacione>();
 }
+
+

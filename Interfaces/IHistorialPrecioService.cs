@@ -1,4 +1,4 @@
-using BilleteraCryptoProjectAPI.DTO.HistorialPrecios;
+﻿using BilleteraCryptoProjectAPI.DTO.HistorialPrecios;
 
 public interface IHistorialPrecioService {
     Task<IEnumerable<HistorialPrecioReadDTO>> GetAllAsync();
@@ -6,3 +6,5 @@ public interface IHistorialPrecioService {
     Task<HistorialPrecioReadDTO> CreateAsync(HistorialPrecioCreateDTO dto);
     Task<bool> UpdateAsync(HistorialPrecioUpdateDTO dto);
 }
+
+

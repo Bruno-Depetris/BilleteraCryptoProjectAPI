@@ -1,4 +1,4 @@
-public interface ICuentaService
+﻿public interface ICuentaService
 {
     Task<IEnumerable<CuentaReadDTO>> GetAllAsync();
     Task<CuentaReadDTO?> GetByIdAsync(int id);
@@ -6,3 +6,4 @@ public interface ICuentaService
     Task<bool> UpdateAsync(CuentaUpdateDTO dto);
     Task<bool> DeleteAsync(int id);
 }
+

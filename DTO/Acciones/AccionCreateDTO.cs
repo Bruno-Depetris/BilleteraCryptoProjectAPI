@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 public class AccionCreateDTO
 {
@@ -6,3 +6,4 @@ public class AccionCreateDTO
     [StringLength(20)]
     public string Accion { get; set; } = null!;
 }
+

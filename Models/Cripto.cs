@@ -14,3 +14,5 @@ public partial class Cripto {
 
     public virtual ICollection<Operacione> Operaciones { get; set; } = new List<Operacione>();
 }
+
+

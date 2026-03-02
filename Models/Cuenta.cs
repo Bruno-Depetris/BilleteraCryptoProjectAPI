@@ -16,3 +16,5 @@ public partial class Cuenta {
 
     public virtual ICollection<Operacione> Operaciones { get; set; } = new List<Operacione>();
 }
+
+

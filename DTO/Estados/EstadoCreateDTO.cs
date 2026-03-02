@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 public class EstadoCreateDTO
 {
@@ -6,3 +6,4 @@ public class EstadoCreateDTO
     [StringLength(50)]
     public string Estado { get; set; } = null!;
 }
+

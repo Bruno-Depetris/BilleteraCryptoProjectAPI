@@ -16,3 +16,5 @@ public partial class HistorialPrecio {
 
     public virtual Cripto CriptoCodeNavigation { get; set; } = null!;
 }
+
+

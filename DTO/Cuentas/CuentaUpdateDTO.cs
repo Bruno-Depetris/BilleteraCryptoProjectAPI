@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 public class CuentaUpdateDTO
 {
@@ -11,3 +11,4 @@ public class CuentaUpdateDTO
     [Required]
     public int EstadoID { get; set; }
 }
+

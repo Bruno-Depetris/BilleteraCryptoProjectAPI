@@ -10,3 +10,5 @@ public partial class Accione {
 
     public virtual ICollection<Operacione> Operaciones { get; set; } = new List<Operacione>();
 }
+
+

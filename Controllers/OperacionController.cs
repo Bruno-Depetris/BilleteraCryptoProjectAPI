@@ -41,8 +41,20 @@ namespace BilleteraCryptoProjectAPI.Controllers {
             }
         }
 
-        [HttpPost]
+        [HttpGet("cliente/{clienteId:int}")]
+        public async Task<IActionResult> GetByClienteId(int clienteId) {
+            try {
+                var operaciones = await _operacionService.GetByClienteIdAsync(clienteId);
+                if (operaciones == null || !operaciones.Any()) {
+                    return NotFound($"No se encontraron operaciones para el cliente {clienteId}.");
+                }
+                return Ok(operaciones);
+            } catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error al obtener las operaciones: {ex.Message}");
+            }
+        }
 
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] OperacionCreateDTO operacionCreateDTO) {
             if (operacionCreateDTO == null) {
                 return BadRequest("El objeto Operacion no puede ser nulo.");
@@ -50,12 +62,42 @@ namespace BilleteraCryptoProjectAPI.Controllers {
             try {
                 var operacion = await _operacionService.CreateAsync(operacionCreateDTO);
                 return CreatedAtAction(nameof(Get), new { id = operacion.OperacionID }, operacion);
+            } catch (InvalidOperationException ex) {
+                return BadRequest(ex.Message);
             } catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error al crear la operación: {ex.Message}");
+            }
+        }
 
+        [HttpPatch("{id:int}")]
+        public async Task<IActionResult> Patch(int id, [FromBody] OperacionUpdateDTO operacionUpdateDTO) {
+            if (operacionUpdateDTO == null) {
+                return BadRequest("El objeto Operacion no puede ser nulo.");
+            }
+            try {
+                var result = await _operacionService.UpdateAsync(id, operacionUpdateDTO);
+                if (!result) {
+                    return NotFound($"No se encontró la operación con ID {id}.");
+                }
+                return NoContent();
+            } catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error al actualizar la operación: {ex.Message}");
+            }
+        }
 
-
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id) {
+            try {
+                var result = await _operacionService.DeleteAsync(id);
+                if (!result) {
+                    return NotFound($"No se encontró la operación con ID {id}.");
+                }
+                return NoContent();
+            } catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error al eliminar la operación: {ex.Message}");
             }
         }
     }
 }
+
+

@@ -1,4 +1,4 @@
-public interface IClienteService
+﻿public interface IClienteService
 {
     Task<IEnumerable<ClienteReadDTO>> GetAllAsync();
     Task<ClienteReadDTO?> GetByIdAsync(int id);
@@ -6,3 +6,4 @@ public interface IClienteService
     Task<bool> UpdateAsync(ClienteUpdateDTO dto);
     Task<bool> DeleteAsync(int id);
 }
+

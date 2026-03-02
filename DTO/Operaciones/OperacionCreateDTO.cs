@@ -1,22 +1,22 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 public class OperacionCreateDTO
 {
     [Required]
-    public int CuentaID { get; set; }
+    public int ClienteID { get; set; }
 
     [Required]
+    [StringLength(20)]
     public string CriptoCode { get; set; } = null!;
 
     [Required]
-    public decimal Cantidad { get; set; }
+    public decimal CriptoAmount { get; set; }
 
     [Required]
-    public DateTime Fecha { get; set; }
+    [StringLength(20)]
+    public string Action { get; set; } = null!; // "purchase" o "sale"
 
     [Required]
-    public int AccionID { get; set; }
-
-    [Required]
-    public decimal MontoARS { get; set; }
+    public DateTime Datetime { get; set; }
 }
+

@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 public class CriptoCreateDTO
 {
@@ -10,3 +10,4 @@ public class CriptoCreateDTO
     [StringLength(50)]
     public string Nombre { get; set; } = null!;
 }
+

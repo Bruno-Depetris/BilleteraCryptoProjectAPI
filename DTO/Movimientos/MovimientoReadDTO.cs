@@ -1,4 +1,4 @@
-public class MovimientoReadDTO
+﻿public class MovimientoReadDTO
 {
     public int MovimientoID { get; set; }
     public int OperacionID { get; set; }
@@ -10,3 +10,4 @@ public class MovimientoReadDTO
     public OperacionReadDTO? Operacion { get; set; }
     public CriptoReadDTO? Cripto { get; set; }
 }
+

@@ -159,36 +159,27 @@ public partial class CryptoWalletApiDBContext : DbContext {
         modelBuilder.Entity<Operacione>(entity => {
             entity.HasKey(e => e.OperacionId).HasName("PRIMARY");
 
-            entity.HasIndex(e => e.AccionId, "AccionID");
+            entity.HasIndex(e => e.ClienteId, "ClienteID");
 
             entity.HasIndex(e => e.CriptoCode, "CriptoCode");
 
-            entity.HasIndex(e => e.CuentaId, "CuentaID");
-
             entity.Property(e => e.OperacionId).HasColumnName("OperacionID");
-            entity.Property(e => e.AccionId).HasColumnName("AccionID");
-            entity.Property(e => e.Cantidad).HasPrecision(18, 8);
+            entity.Property(e => e.ClienteId).HasColumnName("ClienteID");
+            entity.Property(e => e.CriptoAmount).HasPrecision(18, 8);
+            entity.Property(e => e.Money).HasPrecision(18, 2);
             entity.Property(e => e.CriptoCode).HasMaxLength(20);
-            entity.Property(e => e.CuentaId).HasColumnName("CuentaID");
-            entity.Property(e => e.Fecha).HasColumnType("datetime");
-            entity.Property(e => e.MontoArs)
-                .HasPrecision(18, 2)
-                .HasColumnName("MontoARS");
+            entity.Property(e => e.Action).HasMaxLength(20);
+            entity.Property(e => e.Datetime).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Accion).WithMany(p => p.Operaciones)
-                .HasForeignKey(d => d.AccionId)
+            entity.HasOne(d => d.Cliente).WithMany(p => p.Operaciones)
+                .HasForeignKey(d => d.ClienteId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Operaciones_ibfk_3");
+                .HasConstraintName("Operaciones_ibfk_1");
 
             entity.HasOne(d => d.CriptoCodeNavigation).WithMany(p => p.Operaciones)
                 .HasForeignKey(d => d.CriptoCode)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Operaciones_ibfk_2");
-
-            entity.HasOne(d => d.Cuenta).WithMany(p => p.Operaciones)
-                .HasForeignKey(d => d.CuentaId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Operaciones_ibfk_1");
         });
 
         OnModelCreatingPartial(modelBuilder);
@@ -196,3 +187,5 @@ public partial class CryptoWalletApiDBContext : DbContext {
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
+
+

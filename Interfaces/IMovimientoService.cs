@@ -1,4 +1,4 @@
-using BilleteraCryptoProjectAPI.DTO.HistorialPrecios;
+﻿using BilleteraCryptoProjectAPI.DTO.HistorialPrecios;
 
 public interface IMovimientoService
 {
@@ -9,3 +9,4 @@ public interface IMovimientoService
 
 
 }
+

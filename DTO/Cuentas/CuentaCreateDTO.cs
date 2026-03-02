@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 public class CuentaCreateDTO
 {
@@ -8,3 +8,4 @@ public class CuentaCreateDTO
     [Required]
     public int EstadoID { get; set; }
 }
+

@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 public class ClienteCreateDTO
 {
@@ -11,3 +11,4 @@ public class ClienteCreateDTO
     [StringLength(100)]
     public string Email { get; set; } = null!;
 }
+

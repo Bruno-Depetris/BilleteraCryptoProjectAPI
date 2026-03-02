@@ -6,23 +6,23 @@ namespace BilleteraCryptoProjectAPI.Models;
 public partial class Operacione {
     public int OperacionId { get; set; }
 
-    public int CuentaId { get; set; }
+    public int ClienteId { get; set; }
 
     public string CriptoCode { get; set; } = null!;
 
-    public decimal Cantidad { get; set; }
+    public decimal CriptoAmount { get; set; }
 
-    public DateTime Fecha { get; set; }
+    public decimal Money { get; set; }
 
-    public int AccionId { get; set; }
+    public string Action { get; set; } = null!; // "purchase" o "sale"
 
-    public decimal MontoArs { get; set; }
+    public DateTime Datetime { get; set; }
 
-    public virtual Accione Accion { get; set; } = null!;
+    public virtual Cliente Cliente { get; set; } = null!;
 
     public virtual Cripto CriptoCodeNavigation { get; set; } = null!;
 
-    public virtual Cuenta Cuenta { get; set; } = null!;
-
     public virtual ICollection<Movimiento> Movimientos { get; set; } = new List<Movimiento>();
 }
+
+

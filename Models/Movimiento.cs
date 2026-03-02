@@ -20,3 +20,5 @@ public partial class Movimiento {
 
     public virtual Operacione Operacion { get; set; } = null!;
 }
+
+

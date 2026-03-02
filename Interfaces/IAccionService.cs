@@ -1,4 +1,4 @@
-public interface IAccionService
+﻿public interface IAccionService
 {
     Task<IEnumerable<AccionReadDTO>> GetAllAsync();
     Task<AccionReadDTO?> GetByIdAsync(int id);
@@ -7,3 +7,4 @@ public interface IAccionService
 
     Task<bool> DeleteAsync(int id); 
 }
+

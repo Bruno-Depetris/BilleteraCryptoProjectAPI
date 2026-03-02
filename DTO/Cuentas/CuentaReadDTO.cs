@@ -1,4 +1,4 @@
-public class CuentaReadDTO
+﻿public class CuentaReadDTO
 {
     public int CuentaID { get; set; }
     public int ClienteID { get; set; }
@@ -7,3 +7,4 @@ public class CuentaReadDTO
     public ClienteReadDTO? Cliente { get; set; }
     public EstadoReadDTO? Estado { get; set; }
 }
+

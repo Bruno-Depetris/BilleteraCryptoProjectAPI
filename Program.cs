@@ -1,20 +1,20 @@
-using BilleteraCryptoProjectAPI.Data;
+﻿using BilleteraCryptoProjectAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
 using System;
 using BilleteraCryptoProjectAPI.Logic;
+using BilleteraCryptoProjectAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Cargar el archivo .env
 Env.Load();
 
-// Configurar servicios
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Registrar el DbContext antes de llamar a Build()
+builder.Services.AddHttpClient<ICriptoyaService, CriptoyaService>();
+
 
 var connectionString = CryptoWalletApiDBContext.GetConnectionString();
 
@@ -35,12 +35,13 @@ builder.Services.AddScoped<IEstadoService, EstadoLogic>();
 builder.Services.AddScoped<IOperacionService, OperacionLogic>();
 builder.Services.AddScoped<IHistorialPrecioService, HistorialPrecioLogic>();
 builder.Services.AddScoped<IMovimientoService, MovimientoLogic>();
+builder.Services.AddScoped<IDashboardService, DashboardLogic>();
 
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin()  // o usa WithOrigins("http://localhost:5173") si querés restringir
+        policy.AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
@@ -49,10 +50,8 @@ builder.Services.AddCors(options =>
 
 
 
-// Construir la app
 var app = builder.Build();
 app.UseCors();
-// Configurar el pipeline HTTP
 if (app.Environment.IsDevelopment()) {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
@@ -78,3 +77,5 @@ app.UseExceptionHandler(errorApp => {
 });
 
 app.Run();
+
+

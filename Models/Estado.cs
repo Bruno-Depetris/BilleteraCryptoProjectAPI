@@ -10,3 +10,5 @@ public partial class Estado {
 
     public virtual ICollection<Cuenta> Cuenta { get; set; } = new List<Cuenta>();
 }
+
+

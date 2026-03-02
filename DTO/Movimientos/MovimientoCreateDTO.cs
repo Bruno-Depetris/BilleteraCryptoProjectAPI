@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 public class MovimientoCreateDTO
 {
@@ -17,3 +17,4 @@ public class MovimientoCreateDTO
     [Required]
     public DateTime Fecha { get; set; }
 }
+

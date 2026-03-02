@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 public class HistorialPrecioCreateDTO
 {
@@ -13,3 +13,4 @@ public class HistorialPrecioCreateDTO
 
     public string? Fuente { get; set; }
 }
+

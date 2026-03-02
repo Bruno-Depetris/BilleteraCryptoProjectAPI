@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 public class AccionUpdateDTO
 {
@@ -9,3 +9,4 @@ public class AccionUpdateDTO
     [StringLength(20)]
     public string Accion { get; set; } = null!;
 }
+

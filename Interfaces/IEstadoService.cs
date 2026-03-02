@@ -1,4 +1,4 @@
-public interface IEstadoService
+﻿public interface IEstadoService
 {
     Task<IEnumerable<EstadoReadDTO>> GetAllAsync();
     Task<EstadoReadDTO?> GetByIdAsync(int id);
@@ -6,3 +6,4 @@ public interface IEstadoService
     Task<bool> UpdateAsync(EstadoUpdateDTO dto);
     Task<bool> DeleteAsync(int id);
 }
+

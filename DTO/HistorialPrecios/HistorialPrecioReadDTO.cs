@@ -1,4 +1,4 @@
-public class HistorialPrecioReadDTO
+﻿public class HistorialPrecioReadDTO
 {
     public int HistorialID { get; set; }
     public string CriptoCode { get; set; } = null!;
@@ -8,3 +8,4 @@ public class HistorialPrecioReadDTO
 
     public CriptoReadDTO? Cripto { get; set; }
 }
+
