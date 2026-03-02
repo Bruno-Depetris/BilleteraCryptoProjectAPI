@@ -15,6 +15,11 @@ public partial class CryptoWalletApiDBContext : DbContext {
     }
 
     public static string GetConnectionString() {
+        var directUrl = GetEnv("MYSQL_URL", "DATABASE_URL");
+        if (!string.IsNullOrWhiteSpace(directUrl)) {
+            return BuildMySqlConnectionFromUrl(directUrl);
+        }
+
         var host = GetEnv("MYSQL_ADDON_HOST", "MYSQLHOST");
         var port = GetEnv("MYSQL_ADDON_PORT", "MYSQLPORT");
         var db = GetEnv("MYSQL_ADDON_DB", "MYSQLDATABASE");
@@ -26,6 +31,26 @@ public partial class CryptoWalletApiDBContext : DbContext {
         }
 
         return $"Server={host};Port={port};Database={db};Uid={user};Pwd={pass};";
+    }
+
+    private static string BuildMySqlConnectionFromUrl(string url) {
+        var normalized = url.Trim();
+        if (!normalized.Contains("://")) {
+            normalized = $"mysql://{normalized}";
+        }
+
+        var uri = new Uri(normalized);
+        var userInfo = uri.UserInfo.Split(':', 2);
+        var user = userInfo.Length > 0 ? Uri.UnescapeDataString(userInfo[0]) : string.Empty;
+        var pass = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty;
+        var db = uri.AbsolutePath.Trim('/');
+        var port = uri.Port > 0 ? uri.Port : 3306;
+
+        if (string.IsNullOrWhiteSpace(uri.Host) || string.IsNullOrWhiteSpace(db) || string.IsNullOrWhiteSpace(user)) {
+            throw new InvalidOperationException("MYSQL_URL/DATABASE_URL no tiene el formato esperado para MySQL.");
+        }
+
+        return $"Server={uri.Host};Port={port};Database={db};Uid={user};Pwd={pass};";
     }
 
     private static string? GetEnv(params string[] keys) {
