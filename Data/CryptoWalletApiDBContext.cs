@@ -15,14 +15,81 @@ public partial class CryptoWalletApiDBContext : DbContext {
     }
 
     public static string GetConnectionString() {
+        var configuredConnectionString = GetEnv("ConnectionStrings__DefaultConnection", "DefaultConnection");
+        if (!string.IsNullOrWhiteSpace(configuredConnectionString)) {
+            return configuredConnectionString;
+        }
 
-        var host = Environment.GetEnvironmentVariable("yamanote.proxy.rlwy.net");
-        var port = Environment.GetEnvironmentVariable("39689");
-        var db = Environment.GetEnvironmentVariable("railway");
-        var user = Environment.GetEnvironmentVariable("root");
-        var pass = Environment.GetEnvironmentVariable("bCTivbKigRtXwqWhARYJBfCDahgQRZpX");
+        var directUrl = GetEnv("MYSQL_URL", "DATABASE_URL", "MYSQL_ADDON_URI", "CLEARDB_DATABASE_URL");
+        if (!string.IsNullOrWhiteSpace(directUrl)) {
+            return BuildMySqlConnectionFromUrl(directUrl);
+        }
+
+        var host = GetEnv("MYSQL_ADDON_HOST", "MYSQLHOST", "MYSQL_HOST");
+        var port = GetEnv("MYSQL_ADDON_PORT", "MYSQLPORT", "MYSQL_PORT");
+        var db = GetEnv("MYSQL_ADDON_DB", "MYSQL_ADDON_DATABASE", "MYSQL_ADDON_DBNAME", "MYSQLDATABASE", "MYSQL_DATABASE", "MYSQL_DB", "DB_NAME");
+        var user = GetEnv("MYSQL_ADDON_USER", "MYSQLUSER", "MYSQL_USER", "MYSQL_USERNAME");
+        var pass = GetEnv("MYSQL_ADDON_PASSWORD", "MYSQLPASSWORD", "MYSQL_PASSWORD", "MYSQL_PASS");
+
+        if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(port) || string.IsNullOrWhiteSpace(db) || string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(pass)) {
+            var detected = string.Join(", ", new[] {
+                $"MYSQL_ADDON_HOST={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_HOST"))}",
+                $"MYSQL_ADDON_PORT={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_PORT"))}",
+                $"MYSQL_ADDON_DB={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_DB"))}",
+                $"MYSQL_ADDON_USER={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_USER"))}",
+                $"MYSQL_ADDON_PASSWORD={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_PASSWORD"))}",
+                $"MYSQLHOST={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQLHOST"))}",
+                $"MYSQLPORT={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQLPORT"))}",
+                $"MYSQLDATABASE={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQLDATABASE"))}",
+                $"MYSQLUSER={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQLUSER"))}",
+                $"MYSQLPASSWORD={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQLPASSWORD"))}",
+                $"MYSQL_ADDON_DATABASE={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_DATABASE"))}",
+                $"MYSQL_ADDON_DBNAME={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_DBNAME"))}",
+                $"MYSQL_HOST={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_HOST"))}",
+                $"MYSQL_PORT={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_PORT"))}",
+                $"MYSQL_DATABASE={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_DATABASE"))}",
+                $"MYSQL_USER={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_USER"))}",
+                $"MYSQL_PASSWORD={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_PASSWORD"))}",
+                $"MYSQL_ADDON_URI={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_URI"))}",
+                $"MYSQL_URL={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_URL"))}",
+                $"DATABASE_URL={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("DATABASE_URL"))}",
+                $"ConnectionStrings__DefaultConnection={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection"))}",
+                $"DefaultConnection={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("DefaultConnection"))}"
+            });
+            throw new InvalidOperationException($"Faltan variables de entorno de MySQL. Definir MYSQL_ADDON_*, MYSQL* o MYSQL_URL/DATABASE_URL en el entorno de despliegue. Detectadas: {detected}");
+        }
 
         return $"Server={host};Port={port};Database={db};Uid={user};Pwd={pass};";
+    }
+
+    private static string BuildMySqlConnectionFromUrl(string url) {
+        var normalized = url.Trim();
+        if (!normalized.Contains("://")) {
+            normalized = $"mysql://{normalized}";
+        }
+
+        var uri = new Uri(normalized);
+        var userInfo = uri.UserInfo.Split(':', 2);
+        var user = userInfo.Length > 0 ? Uri.UnescapeDataString(userInfo[0]) : string.Empty;
+        var pass = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty;
+        var db = uri.AbsolutePath.Trim('/');
+        var port = uri.Port > 0 ? uri.Port : 3306;
+
+        if (string.IsNullOrWhiteSpace(uri.Host) || string.IsNullOrWhiteSpace(db) || string.IsNullOrWhiteSpace(user)) {
+            throw new InvalidOperationException("MYSQL_URL/DATABASE_URL no tiene el formato esperado para MySQL.");
+        }
+
+        return $"Server={uri.Host};Port={port};Database={db};Uid={user};Pwd={pass};";
+    }
+
+    private static string? GetEnv(params string[] keys) {
+        foreach (var key in keys) {
+            var value = Environment.GetEnvironmentVariable(key);
+            if (!string.IsNullOrWhiteSpace(value)) {
+                return value;
+            }
+        }
+        return null;
     }
 
     public virtual DbSet<Accione> Acciones { get; set; }
@@ -43,13 +110,7 @@ public partial class CryptoWalletApiDBContext : DbContext {
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         if (!optionsBuilder.IsConfigured) {
-            var host = Environment.GetEnvironmentVariable("MYSQL_ADDON_HOST");
-            var port = Environment.GetEnvironmentVariable("MYSQL_ADDON_PORT");
-            var db = Environment.GetEnvironmentVariable("MYSQL_ADDON_DB");
-            var user = Environment.GetEnvironmentVariable("MYSQL_ADDON_USER");
-            var pass = Environment.GetEnvironmentVariable("MYSQL_ADDON_PASSWORD");
-
-            var connStr = $"Server={host};Port={port};Database={db};Uid={user};Pwd={pass};";
+            var connStr = GetConnectionString();
             optionsBuilder.UseMySql(connStr, ServerVersion.AutoDetect(connStr));
         }
     }

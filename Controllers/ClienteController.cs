@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BilleteraCryptoProjectAPI.Controllers {
     [Route("api/[controller]")]
@@ -17,9 +18,9 @@ namespace BilleteraCryptoProjectAPI.Controllers {
 
 
         [HttpGet]
-        public IActionResult Get() {
+        public async Task<IActionResult> Get() {
             try {
-                var clientes = clienteService.GetAllAsync().Result;
+                var clientes = await clienteService.GetAllAsync();
                 if (clientes == null || !clientes.Any()) {
                     return NotFound("No se encontraron clientes.");
                 }
@@ -30,9 +31,9 @@ namespace BilleteraCryptoProjectAPI.Controllers {
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult Get(int id) {
+        public async Task<IActionResult> Get(int id) {
             try {
-                var cliente = clienteService.GetByIdAsync(id).Result;
+                var cliente = await clienteService.GetByIdAsync(id);
                 if (cliente == null) {
                     return NotFound($"No se encontró el cliente con ID {id}.");
                 }
@@ -43,25 +44,27 @@ namespace BilleteraCryptoProjectAPI.Controllers {
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] ClienteCreateDTO clienteCreateDTO) {
+        public async Task<IActionResult> Post([FromBody] ClienteCreateDTO clienteCreateDTO) {
             if (clienteCreateDTO == null) {
                 return BadRequest("El objeto Cliente no puede ser nulo.");
             }
             try {
-                var cliente = clienteService.CreateAsync(clienteCreateDTO).Result;
+                var cliente = await clienteService.CreateAsync(clienteCreateDTO);
                 return CreatedAtAction(nameof(Get), new { id = cliente.ClienteID }, cliente);
+            } catch (DbUpdateException dbEx) when (dbEx.InnerException?.Message.Contains("Duplicate", StringComparison.OrdinalIgnoreCase) == true || dbEx.InnerException?.Message.Contains("Email", StringComparison.OrdinalIgnoreCase) == true) {
+                return Conflict("Ya existe un cliente con ese email.");
             } catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error al crear el cliente: {ex.Message}");
             }
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult Put(int id, [FromBody] ClienteUpdateDTO clienteUpdateDTO) {
+        public async Task<IActionResult> Put(int id, [FromBody] ClienteUpdateDTO clienteUpdateDTO) {
             if (clienteUpdateDTO == null || clienteUpdateDTO.ClienteID != id) {
                 return BadRequest("El objeto Cliente no puede ser nulo y debe tener el ID correcto.");
             }
             try {
-                var updated = clienteService.UpdateAsync(clienteUpdateDTO).Result;
+                var updated = await clienteService.UpdateAsync(clienteUpdateDTO);
                 if (!updated) {
                     return NotFound($"No se encontró el cliente con ID {id} para actualizar.");
                 }
@@ -74,10 +77,10 @@ namespace BilleteraCryptoProjectAPI.Controllers {
 
 
         [HttpDelete("{id:int}")]
-        public IActionResult Delete(int id) {
+        public async Task<IActionResult> Delete(int id) {
 
             try {
-                var deleted = clienteService.DeleteAsync(id).Result;
+                var deleted = await clienteService.DeleteAsync(id);
                 if (!deleted) {
                     return NotFound($"No se encontró el cliente con ID {id} para eliminar.");
                 }

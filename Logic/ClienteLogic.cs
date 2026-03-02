@@ -40,6 +40,7 @@ namespace BilleteraCryptoProjectAPI.Logic {
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
             return new ClienteReadDTO {
+                ClienteID = cliente.ClienteId,
                 Nombre = cliente.Nombre,
                 Email = cliente.Email
             };
