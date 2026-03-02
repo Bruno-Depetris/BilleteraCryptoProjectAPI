@@ -2,12 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
 using System;
+using System.IO;
 using BilleteraCryptoProjectAPI.Logic;
 using BilleteraCryptoProjectAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Env.Load();
+var envPath = Path.Combine(builder.Environment.ContentRootPath, ".env");
+if (File.Exists(envPath)) {
+    Env.Load(envPath);
+}
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
