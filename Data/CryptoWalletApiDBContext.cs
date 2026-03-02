@@ -28,18 +28,18 @@ public partial class CryptoWalletApiDBContext : DbContext {
 
         if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(port) || string.IsNullOrWhiteSpace(db) || string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(pass)) {
             var detected = string.Join(", ", new[] {
-                $"MYSQL_ADDON_HOST={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(\"MYSQL_ADDON_HOST\"))}",
-                $"MYSQL_ADDON_PORT={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(\"MYSQL_ADDON_PORT\"))}",
-                $"MYSQL_ADDON_DB={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(\"MYSQL_ADDON_DB\"))}",
-                $"MYSQL_ADDON_USER={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(\"MYSQL_ADDON_USER\"))}",
-                $"MYSQL_ADDON_PASSWORD={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(\"MYSQL_ADDON_PASSWORD\"))}",
-                $"MYSQLHOST={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(\"MYSQLHOST\"))}",
-                $"MYSQLPORT={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(\"MYSQLPORT\"))}",
-                $"MYSQLDATABASE={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(\"MYSQLDATABASE\"))}",
-                $"MYSQLUSER={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(\"MYSQLUSER\"))}",
-                $"MYSQLPASSWORD={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(\"MYSQLPASSWORD\"))}",
-                $"MYSQL_URL={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(\"MYSQL_URL\"))}",
-                $"DATABASE_URL={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(\"DATABASE_URL\"))}"
+                $"MYSQL_ADDON_HOST={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_HOST"))}",
+                $"MYSQL_ADDON_PORT={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_PORT"))}",
+                $"MYSQL_ADDON_DB={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_DB"))}",
+                $"MYSQL_ADDON_USER={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_USER"))}",
+                $"MYSQL_ADDON_PASSWORD={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_ADDON_PASSWORD"))}",
+                $"MYSQLHOST={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQLHOST"))}",
+                $"MYSQLPORT={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQLPORT"))}",
+                $"MYSQLDATABASE={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQLDATABASE"))}",
+                $"MYSQLUSER={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQLUSER"))}",
+                $"MYSQLPASSWORD={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQLPASSWORD"))}",
+                $"MYSQL_URL={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MYSQL_URL"))}",
+                $"DATABASE_URL={!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("DATABASE_URL"))}"
             });
             throw new InvalidOperationException($"Faltan variables de entorno de MySQL. Definir MYSQL_ADDON_*, MYSQL* o MYSQL_URL/DATABASE_URL en el entorno de despliegue. Detectadas: {detected}");
         }
