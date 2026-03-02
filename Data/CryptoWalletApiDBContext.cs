@@ -15,14 +15,27 @@ public partial class CryptoWalletApiDBContext : DbContext {
     }
 
     public static string GetConnectionString() {
+        var host = GetEnv("MYSQL_ADDON_HOST", "MYSQLHOST");
+        var port = GetEnv("MYSQL_ADDON_PORT", "MYSQLPORT");
+        var db = GetEnv("MYSQL_ADDON_DB", "MYSQLDATABASE");
+        var user = GetEnv("MYSQL_ADDON_USER", "MYSQLUSER");
+        var pass = GetEnv("MYSQL_ADDON_PASSWORD", "MYSQLPASSWORD");
 
-        var host = Environment.GetEnvironmentVariable("MYSQL_ADDON_HOST");
-        var port = Environment.GetEnvironmentVariable("MYSQL_ADDON_PORT");
-        var db = Environment.GetEnvironmentVariable("MYSQL_ADDON_DB");
-        var user = Environment.GetEnvironmentVariable("MYSQL_ADDON_USER");
-        var pass = Environment.GetEnvironmentVariable("MYSQL_ADDON_PASSWORD");
+        if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(port) || string.IsNullOrWhiteSpace(db) || string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(pass)) {
+            throw new InvalidOperationException("Faltan variables de entorno de MySQL. Definir MYSQL_ADDON_* o MYSQL* en el entorno de despliegue.");
+        }
 
         return $"Server={host};Port={port};Database={db};Uid={user};Pwd={pass};";
+    }
+
+    private static string? GetEnv(params string[] keys) {
+        foreach (var key in keys) {
+            var value = Environment.GetEnvironmentVariable(key);
+            if (!string.IsNullOrWhiteSpace(value)) {
+                return value;
+            }
+        }
+        return null;
     }
 
     public virtual DbSet<Accione> Acciones { get; set; }
@@ -43,13 +56,7 @@ public partial class CryptoWalletApiDBContext : DbContext {
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         if (!optionsBuilder.IsConfigured) {
-            var host = Environment.GetEnvironmentVariable("MYSQL_ADDON_HOST");
-            var port = Environment.GetEnvironmentVariable("MYSQL_ADDON_PORT");
-            var db = Environment.GetEnvironmentVariable("MYSQL_ADDON_DB");
-            var user = Environment.GetEnvironmentVariable("MYSQL_ADDON_USER");
-            var pass = Environment.GetEnvironmentVariable("MYSQL_ADDON_PASSWORD");
-
-            var connStr = $"Server={host};Port={port};Database={db};Uid={user};Pwd={pass};";
+            var connStr = GetConnectionString();
             optionsBuilder.UseMySql(connStr, ServerVersion.AutoDetect(connStr));
         }
     }
