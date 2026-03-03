@@ -51,6 +51,10 @@ namespace BilleteraCryptoProjectAPI.Controllers {
             try {
                 var cuenta = await _cuentaService.CreateAsync(cuentaCreateDTO);
                 return CreatedAtAction(nameof(GetByIdAsync), new { id = cuenta.CuentaID }, cuenta);
+            } catch (KeyNotFoundException ex) {
+                return NotFound(ex.Message);
+            } catch (InvalidOperationException ex) {
+                return BadRequest(ex.Message);
             } catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error al crear la cuenta: {ex.Message}");
             }
