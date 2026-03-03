@@ -16,15 +16,15 @@ namespace BilleteraCryptoProjectAPI.Controllers {
         }
 
         [HttpGet]
-        public async Task<IEnumerable<MovimientoReadDTO>> GetAllAsync() {
+        public async Task<IActionResult> GetAllAsync() {
             try {
                 var movimientos = await _movimientoService.GetAllAsync();
                 if (movimientos == null || !movimientos.Any()) {
-                    return (IEnumerable<MovimientoReadDTO>)NotFound("No se encontraron movimientos.");
+                    return NotFound("No se encontraron movimientos.");
                 }
-                return movimientos;
+                return Ok(movimientos);
             } catch (Exception ex) {
-                throw new Exception($"Error al obtener los movimientos: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error al obtener los movimientos: {ex.Message}");
             }
         }
 

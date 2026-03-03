@@ -56,17 +56,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 app.UseCors();
-if (app.Environment.IsDevelopment()) {
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.UseExceptionHandler(errorApp => {
     errorApp.Run(async context => {
@@ -79,6 +68,18 @@ app.UseExceptionHandler(errorApp => {
         }
     });
 });
+
+if (app.Environment.IsDevelopment()) {
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
 

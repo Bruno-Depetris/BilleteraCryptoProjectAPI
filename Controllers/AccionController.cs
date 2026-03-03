@@ -17,10 +17,10 @@ namespace BilleteraCryptoProjectAPI.Controllers {
         }
 
         [HttpGet]
-        public IActionResult Get() {
+        public async Task<IActionResult> Get() {
 
             try {
-                var acciones = _accionService.GetAllAsync().Result;
+                var acciones = await _accionService.GetAllAsync();
                 if (acciones == null || !acciones.Any()) {
                     return NotFound("No se encontraron acciones.");
                 }
@@ -35,9 +35,9 @@ namespace BilleteraCryptoProjectAPI.Controllers {
 
         [HttpGet("{id:int}")]
 
-        public IActionResult Get(int id) {
+        public async Task<IActionResult> Get(int id) {
             try {
-                var accion = _accionService.GetByIdAsync(id).Result;
+                var accion = await _accionService.GetByIdAsync(id);
                 if (accion == null) {
                     return NotFound($"No se encontró la acción con ID {id}.");
                 }
@@ -49,12 +49,12 @@ namespace BilleteraCryptoProjectAPI.Controllers {
 
         [HttpPost]
 
-        public IActionResult Post([FromBody] AccionCreateDTO accionCreateDTO) {
+        public async Task<IActionResult> Post([FromBody] AccionCreateDTO accionCreateDTO) {
             if (accionCreateDTO == null) {
                 return BadRequest("El objeto Accion no puede ser nulo.");
             }
             try {
-                var accion = _accionService.CreateAsync(accionCreateDTO).Result;
+                var accion = await _accionService.CreateAsync(accionCreateDTO);
                 return CreatedAtAction(nameof(Get), new { id = accion.AccionID }, accion);
             } catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error al crear la acción: {ex.Message}");
@@ -64,18 +64,31 @@ namespace BilleteraCryptoProjectAPI.Controllers {
 
         [HttpPut("{id:int}")]
 
-        public IActionResult Put(int id, [FromBody] AccionUpdateDTO accionUpdateDTO) {
+        public async Task<IActionResult> Put(int id, [FromBody] AccionUpdateDTO accionUpdateDTO) {
             if (accionUpdateDTO == null || id != accionUpdateDTO.AccionID) {
                 return BadRequest("El objeto Accion no puede ser nulo y el ID debe coincidir.");
             }
             try {
-                var result = _accionService.UpdateAsync(accionUpdateDTO).Result;
+                var result = await _accionService.UpdateAsync(accionUpdateDTO);
                 if (!result) {
                     return NotFound($"No se encontró la acción con ID {id} para actualizar.");
                 }
                 return NoContent();
             } catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error al actualizar la acción: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id) {
+            try {
+                var result = await _accionService.DeleteAsync(id);
+                if (!result) {
+                    return NotFound($"No se encontró la acción con ID {id} para eliminar.");
+                }
+                return NoContent();
+            } catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error al eliminar la acción: {ex.Message}");
             }
         }
     }

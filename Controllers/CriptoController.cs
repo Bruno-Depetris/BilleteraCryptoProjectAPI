@@ -34,15 +34,15 @@ namespace BilleteraCryptoProjectAPI.Controllers {
         }
 
         [HttpPut("{code}")]
-        public ActionResult<bool> UpdateAsync(string code, CriptoUpdateDTO dto) {
+        public async Task<ActionResult<bool>> UpdateAsync(string code, CriptoUpdateDTO dto) {
             if (code != dto.CriptoCode) {
                 return BadRequest("Code mismatch");
             }
-            var result = criptoService.UpdateAsync(dto);
-            if (!result.Result) {
+            var result = await criptoService.UpdateAsync(dto);
+            if (!result) {
                 return NotFound();
             }
-            return Ok(result.Result);
+            return Ok(result);
         }
 
         [HttpDelete("{code}")]
