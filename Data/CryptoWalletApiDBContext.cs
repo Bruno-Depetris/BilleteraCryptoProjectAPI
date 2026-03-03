@@ -21,13 +21,6 @@ public partial class CryptoWalletApiDBContext : DbContext {
         var user = Environment.GetEnvironmentVariable("DB_USER");
         var pass = Environment.GetEnvironmentVariable("DB_PASS");
 
-        if (string.IsNullOrWhiteSpace(host) ||
-            string.IsNullOrWhiteSpace(db) ||
-            string.IsNullOrWhiteSpace(user) ||
-            string.IsNullOrWhiteSpace(pass)) {
-            throw new InvalidOperationException("Faltan variables de entorno para MySQL. Requeridas: DB_HOST, DB_PORT, DB_NAME, DB_USER y DB_PASS.");
-        }
-
         return $"Server={host};Port={port};Database={db};Uid={user};Pwd={pass};SslMode=Required;AllowPublicKeyRetrieval=True;";
     }
 
