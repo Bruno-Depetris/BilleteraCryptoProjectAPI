@@ -18,8 +18,18 @@
         {
             try
             {
-                var url = $"{BaseUrl}/{exchange}/{cryptoCode.ToLower()}/ars/";
+                var url = $"{BaseUrl}/{exchange}/{cryptoCode.ToLower()}/ars";
                 var response = await _httpClient.GetAsync(url);
+
+                if ((int)response.StatusCode >= 300 && (int)response.StatusCode < 400 && response.Headers.Location != null)
+                {
+                    var redirectedUrl = response.Headers.Location.IsAbsoluteUri
+                        ? response.Headers.Location.ToString()
+                        : new Uri(new Uri(BaseUrl + "/"), response.Headers.Location).ToString();
+
+                    response = await _httpClient.GetAsync(redirectedUrl);
+                }
+
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -27,6 +37,11 @@
 
                 if (result.RootElement.TryGetProperty("ask", out var askElement))
                 {
+                    if (askElement.ValueKind == System.Text.Json.JsonValueKind.Number && askElement.TryGetDecimal(out var numberPrice))
+                    {
+                        return numberPrice;
+                    }
+
                     if (decimal.TryParse(askElement.GetRawText(), out var price))
                     {
                         return price;
