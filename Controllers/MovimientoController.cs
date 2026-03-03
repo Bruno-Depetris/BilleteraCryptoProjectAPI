@@ -19,10 +19,7 @@ namespace BilleteraCryptoProjectAPI.Controllers {
         public async Task<IActionResult> GetAllAsync() {
             try {
                 var movimientos = await _movimientoService.GetAllAsync();
-                if (movimientos == null || !movimientos.Any()) {
-                    return NotFound("No se encontraron movimientos.");
-                }
-                return Ok(movimientos);
+                return Ok(movimientos ?? Enumerable.Empty<MovimientoReadDTO>());
             } catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error al obtener los movimientos: {ex.Message}");
             }

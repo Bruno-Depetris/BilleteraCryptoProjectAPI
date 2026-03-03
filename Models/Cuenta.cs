@@ -13,8 +13,6 @@ public partial class Cuenta {
     public virtual Cliente Cliente { get; set; } = null!;
 
     public virtual Estado Estado { get; set; } = null!;
-
-    public virtual ICollection<Operacione> Operaciones { get; set; } = new List<Operacione>();
 }
 
 
