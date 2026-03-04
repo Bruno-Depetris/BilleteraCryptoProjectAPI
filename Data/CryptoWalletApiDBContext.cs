@@ -12,8 +12,10 @@ public partial class CryptoWalletApiDBContext : DbContext {
 
     public CryptoWalletApiDBContext(DbContextOptions<CryptoWalletApiDBContext> options)
         : base(options) {
-    }
+    } //usamos el constructor
 
+
+    //creo una funcion para usar el connection string desde la api
     public static string GetConnectionString() {
         var host = Environment.GetEnvironmentVariable("DB_HOST");
         var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "3306";
@@ -24,6 +26,7 @@ public partial class CryptoWalletApiDBContext : DbContext {
         return $"Server={host};Port={port};Database={db};Uid={user};Pwd={pass};SslMode=Required;AllowPublicKeyRetrieval=True;";
     }
 
+    //db set ( representacion de una tabla de la bd)
     public virtual DbSet<Accione> Acciones { get; set; }
 
     public virtual DbSet<Cliente> Clientes { get; set; }
@@ -40,6 +43,7 @@ public partial class CryptoWalletApiDBContext : DbContext {
 
     public virtual DbSet<Operacione> Operaciones { get; set; }
 
+    //si no se pudo conectar por inyeccion de dependencias usamos el nuget pomelo
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         if (!optionsBuilder.IsConfigured) {
             var connStr = GetConnectionString();
@@ -47,6 +51,8 @@ public partial class CryptoWalletApiDBContext : DbContext {
         }
     }
 
+
+    //mapeos de entidades con base de datos
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder
             .UseCollation("utf8mb4_0900_ai_ci")

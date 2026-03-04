@@ -4,7 +4,7 @@ using BilleteraCryptoProjectAPI.Models;
 
 namespace BilleteraCryptoProjectAPI.Mapping {
     public class MappingProfile : Profile {
-
+        //mappeos de entidades con DTOs
         public MappingProfile() {
             CreateMap<Cliente, ClienteCreateDTO > ();
             CreateMap<Cliente, ClienteReadDTO> ();

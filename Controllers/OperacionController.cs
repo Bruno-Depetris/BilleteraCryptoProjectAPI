@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BilleteraCryptoProjectAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +9,12 @@ namespace BilleteraCryptoProjectAPI.Controllers {
     public class OperacionController : ControllerBase {
 
         public readonly IOperacionService _operacionService;
+        public readonly ICriptoyaService _criptoyaService;
         public readonly IMapper mapper;
 
-        public OperacionController(IOperacionService operacionService, IMapper mapper) {
+        public OperacionController(IOperacionService operacionService, ICriptoyaService criptoyaService, IMapper mapper) {
             _operacionService = operacionService;
+            _criptoyaService = criptoyaService;
             this.mapper = mapper;
         }
 
@@ -51,6 +54,25 @@ namespace BilleteraCryptoProjectAPI.Controllers {
                 return Ok(operaciones);
             } catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error al obtener las operaciones: {ex.Message}");
+            }
+        }
+
+        [HttpGet("precio/{criptoCode}")]
+        public async Task<IActionResult> GetPrecioActual(string criptoCode) {
+            if (string.IsNullOrWhiteSpace(criptoCode)) {
+                return BadRequest("El código de criptomoneda es obligatorio.");
+            }
+
+            try {
+                var code = criptoCode.Trim().ToUpperInvariant();
+                var precio = await _criptoyaService.GetPriceAsync(code);
+                return Ok(new {
+                    CriptoCode = code,
+                    Precio = precio,
+                    FechaConsulta = DateTime.UtcNow
+                });
+            } catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error al obtener el precio actual: {ex.Message}");
             }
         }
 
